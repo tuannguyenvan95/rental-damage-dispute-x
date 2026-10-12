@@ -2,11 +2,22 @@ import pytest
 import json
 from gltest import get_gl_client, get_accounts
 
-# Patch gl.UserError for gltest runner environment
+# Patch gl.UserError for gltest runner environment via loader hook
 try:
-    import genlayer.gl as gl
-    from genlayer.gl.vm import UserError
-    gl.UserError = UserError
+    import gltest.direct.loader as gl_loader
+    orig_load_module = gl_loader._load_module
+
+    def patched_load_module(contract_path):
+        try:
+            import genlayer.gl as gl
+            if not hasattr(gl, "UserError"):
+                import genlayer.gl.vm as gl_vm
+                gl.UserError = gl_vm.UserError
+        except Exception:
+            pass
+        return orig_load_module(contract_path)
+
+    gl_loader._load_module = patched_load_module
 except Exception:
     pass
 

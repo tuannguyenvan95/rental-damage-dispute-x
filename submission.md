@@ -3,7 +3,7 @@
 **Portal Track:** Builder  
 **Contribution Type:** Intelligent Contracts  
 **Network:** studionet (Chain ID: 61999)  
-**Contract Address:** `0x5e31aE22a5C40e93825ec4EaCB3d72DF0920E6ba`  
+**Contract Address:** `0xabBf001D5617e8f2e0D7192F3FFE7042f7992530`  
 **Evidence URL:** `https://github.com/tuannguyenvan95/rental-damage-dispute-x`  
 
 ---
