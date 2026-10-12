@@ -12,9 +12,9 @@
 
 The **RentalDamageDisputeX** Intelligent Contract is deployed, finalized, and verified on GenLayer **studionet**:
 
-- **CONTRACT_ADDRESS:** `0xabBf001D5617e8f2e0D7192F3FFE7042f7992530`
+- **CONTRACT_ADDRESS:** `0xbe46a379bB23C5dd48D56ba76fcA25507A201859`
 - **TRANSACTION_HASH:** `0xff05d1a2e918b115144efa33d4dee0d73ce47d211a98e4c8f3c2d13d1622323e`
-- **DEPLOYER_ADDRESS:** `0xb6Fa6B51e4BaA768df79D08FaDe05dD12b69306b`
+- **DEPLOYER_ADDRESS:** `0x0b0b3e21bbe0a8e2e51525b9c14dc656a3a32056`
 - **NETWORK:** `studionet` (Chain ID: `61999` / `0xF1EF`)
 - **RPC_URL:** `https://studio.genlayer.com/api`
 - **RECEIPT_STATUS:** `5` (FINALIZED)
