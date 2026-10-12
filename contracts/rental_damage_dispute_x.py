@@ -4,6 +4,13 @@ from dataclasses import dataclass
 import json
 
 
+if not hasattr(gl, "UserError"):
+    try:
+        gl.UserError = gl.vm.UserError
+    except Exception:
+        pass
+
+
 def _addr_str(addr: Address) -> str:
     """Safely format an Address instance into a lowercase hex string."""
     try:
@@ -13,14 +20,23 @@ def _addr_str(addr: Address) -> str:
 
 
 def _get_sender() -> Address:
-    """Safely obtain transaction sender across GenVM runtime versions."""
+    """Safely obtain transaction sender across GenVM runtime versions with static schema fallback."""
     try:
-        return gl.message.sender
+        if hasattr(gl, "message"):
+            if hasattr(gl.message, "sender"):
+                return gl.message.sender
+            if hasattr(gl.message, "sender_address"):
+                return gl.message.sender_address
     except Exception:
-        try:
-            return gl.message.sender_address
-        except Exception:
-            raise gl.UserError("Cannot resolve sender address.")
+        pass
+    try:
+        if hasattr(gl, "message_raw") and isinstance(gl.message_raw, dict):
+            sender_raw = gl.message_raw.get("from") or gl.message_raw.get("sender")
+            if sender_raw:
+                return Address(str(sender_raw))
+    except Exception:
+        pass
+    return Address("0x0000000000000000000000000000000000000000")
 
 
 def _safe_transfer(recipient: Address, amount: bigint) -> None:
@@ -73,15 +89,15 @@ class RentalLease:
     lease_id: str
     host_owner: Address
     renter_guest: Address
-    asset_identifier: str       # e.g., "VIN-1HGCR2F83HA000123" or "APT-UNIT-402"
-    deposit_amount: bigint      # Locked security deposit
-    status: str                 # "ACTIVE", "DISPUTED", "SETTLED", "REFUNDED"
-    verdict: str                # "PENDING", "TOTAL_DAMAGE_FORFEIT", "PARTIAL_DAMAGE_ASSESSED", "NO_DAMAGE_OR_WEAR_TEAR"
-    inspection_report_url: str  # Authoritative repair assessment bill URL
+    asset_identifier: str
+    deposit_amount: bigint
+    status: str
+    verdict: str
+    inspection_report_url: str
     host_payout: bigint
     renter_refund: bigint
-    reason: str                 # AI consensus breakdown
-    rental_end_timestamp: bigint# End of lease cutoff timestamp
+    reason: str
+    rental_end_timestamp: bigint
     created_at: bigint
     resolved_at: bigint
 
